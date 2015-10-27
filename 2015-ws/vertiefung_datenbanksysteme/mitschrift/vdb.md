@@ -60,3 +60,51 @@ XPath-Funktionen, z.B.:
 - ...
 
 Beispiel: /Leute/Person[position()=2] <=> /Leute/Person[2]
+
+## Mitschrift 2015-10-13
+
+[... XQuery-Einführung fehlt ...]
+
+#### 2.2 XQuery-Ausdrücke
+- einfache Ausdrücke: ..., ..., XPath-Pfadausdrücke
+- FLWOR-Ausdrücke (for/let, where order by, return)
+- FLWOR-Ausdrücke verarbeiten Eingangssequenzen mit Hilfe eines Pipelining-Prinzips und produzieren eine Ausgangssequenz
+
+##### Grundbegriffe:
+Variablenbindung: Bindung einer Variablen an einen Wert
+Tupel: Menge von Variablenbindungen
+Tupelstrom: Sequenz von Tupeln
+
+einzelne Klauseln:
+Eine ++LET++-Klausel bzw. eine ++FOR++-Klausel erzeugt einen Tupelstrom. Dabei bindet eine LET-Klausel das Ergebnis eines Ausdrucks als Gesamtheit in einem Schritt, eine FOR-Klauel elementweise (die Einträge nacheinander) an eine Variable.
+Der Tupelstrom wird anschließend durch ++WHERE++-und ++ORDER BY++-Klauseln weiter verarbeitet.
+
+WHERE-Ausdruck: Filterung
+ORDER BY-Ausdruck: Sortierung
+
+Zum Schluss wird durch einen RETURN-Ausdruck das Ergebnis konstruiert und zurückgegeben.
+
+Elementkonstruktor: `<tag>{...}{...}...</tag>`
+
+FLWOR-Ausdrücke können in XML-Dokumente eingebettet werden, insbesondere über {...} in Tags.
+
+#### 2.3 Verbünde/Joins
+Verbundanfragen werden in XQuery als Schachtelung von FOR-Schleifen spezifiziert, zusätzlich wird in einer WHERE-Klausel oder einem Prädikat eine Verbundbedingung ausgedrückt.
+Anschließend konstuiert ein RETURN-Ausdruck das Ergebnis(-Dokument).
+
+#### 2.4 Gruppierung und Aggregatfunktionen
+Modellierung durch FOR+LET:
+Mit einem FOR-Ausdruck bindet man eine Variable nacheinander an die Elemente, nach denen gruppiert werden soll. Für jede dieser Variablenbindungen bindet man in einem anschließenden LET-Ausdruck eine weitere Variable an diejenigen Sequenzen, auf die danach eine Aggregatfunktion angewendet werden soll.
+
+#### 2.5 Quantoren
+>SOME -> ∀
+
+>> ... SATISFIES `<Testausdruck>` (-> false/true)
+
+>EVERY -> ∃
+
+### Praktikum 1 (2015-10-13)
+#### Aufgabe 1
+1. //verein
+2. a) //verein/@name
+   b) 
