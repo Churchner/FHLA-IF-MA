@@ -196,6 +196,8 @@ Gleiches Format wie Entscheidungsregeln, allerdings kann ein Klassifikationsattr
 ##### 1-Regel (1-Regel-Lernverfahren, OneR)
 Zieht für die Entscheidung nur ein Attribut der Trainingsdaten heran: dasjenige mit der geringsten Gesamtfehlerrate.
 
+## Mitschrift 2015-10-27
+
 ##### Naives Bayes
 Vorbemerkung: Bayes-Regel
 A, B Ereignisse
@@ -209,3 +211,84 @@ Eigenschaften: Alle Argumentattribute unabhängig voneinander / gleich wichtig.
 Verfahren: neue Instanz: {sunny, cool, high, windy}
 Gesucht: P(play=yes|`<neue Instanz>`), P(play=yes|`<neue Instanz>`)
 -> Entscheidung für den Klassifikationsattributswert mit größerem P.
+
+##### Berechnung von Entscheidungsbäumen (Id3-Algorithmus)
+Ergebnis: Entscheidungsbaum
+- innere Knoten: 
+	- enthalten Argumentattribute
+	- ausgehend: Kanten mit Werten dieses Argumentattributs
+- Blätter
+	- enthalten Entscheidungen: Werte des Klassifikationsattributs
+
+Prinzip: ++Informationsgewinn++(-> beruht auf dem Begriff "Information": info()) durch Auswertung eines Attributs: gain()
+
+info(): Map (Kennzahl) für während eines Lernprozesses noch zu gewinnende Information
+gain(): Map (Kennzahl) für Info-Gewinn (ist Differenz zwischen zwei Werten von info())
+
+Eigenschaften von info(): Wert zwischen 0 und 1, dazwischen monoton.
+
+Id3-Weiterentwicklungen: C 4.5, C 5.0, J 48
+
+### Praktikum 2 (2015-10-27)
+1)
+`for $forscher in doc("forscher.xml")/wissenschaft/forscher`
+`return $forscher/name/nname`
+2)
+`for $forscher in doc("forscher.xml")/wissenschaft/forscher`
+`where $forscher/name/vname='Albert'`
+`and $forscher/name/nname='Einstein'`
+`return concat(	$forscher/hochschule, ", ", $forscher/herkunftsland, ", ", forscher/spezgebiet )`
+3)
+`for $forscher in doc("forscher.xml")/wissenschaft/forscher`
+`where $forscher/hochschule='UBerlin'`
+`return concat(string-join(($forscher/name/vname, $forscher/name/nname), " "), ",")`
+4)
+`for $proj in doc("wissprojekte.xml")/wissprojekte/projekt,`
+`	$laeuft in doc("wissprojekte.xml")/wissprojekte/laeuft_an,`
+`	$uni in doc("forscher.xml")/wissenschaft/uni`
+`where $proj/@pnummer = $laeuft/@pnr`
+`	and $laeuft/@uname = $uni/uname`
+`	and $proj/pstandort/@bundesland="Bayern"`
+`	return <a4 pnr="{$proj/@pnummer}" pname="{$proj/pname}" uname="{$uni/uname}" gruendung="{$uni/@gruendungsdatum}"/>`
+... Rest im Repo ...
+
+## Mitschrift 2015-11-03
+
+#### Berechnung von Entscheidungslisten
+- Grundlagen:
+  - Regeln:
+    - `if(<Bedingung>) then <Folgerung>`
+    - `<Bedingung> => <Folgerung>`
+  - ++Abdeckung AR++ einer Regel: die Anzahl der Instanzen der Trainingsdaten, für die Regel zutrifft.
+  - ++Abdeckung AB++ der Bedingung einer Regel: die Anzahl der Instanzen der Trainingsdaten, die die Bedingung der Regel erfüllen, d.h. auf die die Regel angewandt werden kann.
+  - ++Genauigkeit++: Genauigkeit einer Regel: $$$GK = \frac{AR}{AB}$$$
+
+##### Prism-Algorithmus
+- Aufstellung: initiale, triviale Regel:
+ - ? bei der Bedingung
+ - beliebige Entscheidungsklasse
+
+ -> i.A. schlechte Genauigkeit
+ 
+- Iterative Regelverbesserung
+ - Integration (schrittweise) von Vergleichen in die Bedingung der Regel
+ - Genauigkeit erhöht sich
+ 
+- Ende der Regelverbesserung: hoffentlich ein 100% (Genauigkeit)
+- Ergebnis: Regelmenge mit vordefinierter Genauigkeit (i.A. 100%)
+
+Eigenschaft (Prism): Regeln können in beliebiger Reihenfolge angewendet werden **(was wirklich zu beweisen ist!)**
+ 
+#### Berechnung von Assoziationsregeln (Apriori-Algorithmus)
+
+Grundbegriffe: Gegenstand, ++Assoziationsregel++, Abdeckung, Genauigkeit
+
+Prinzip Apriori-Algorithmus:
+- Aus den Gegenstandsmengen von Trainingsdaten lassen sich per Kombination ihrer Gegenstände Assoziationsregeln erzeugen und deren Genauigkeiten berechnen.
+- Nur die Regeln mit einer vorgegebenen Mindestgenauigkeit werden als Resultat des Apriori-Algorithmus anerkannt (100% od. 99%).
+
+#### Weitere Algorithmen
+###### Lineare Regression
+- Verfahren zur numerischen Klassifikation
+- Annahme: der Wert des numerischen Klassenattributs ist eine lineare Kombination der Werte der ebenfalls numerischen Argumentattribute.
+- Die Konstanten (Gewichte) der linearen Kombination müssen anhand der Trainingsdaten optimiert werden.
