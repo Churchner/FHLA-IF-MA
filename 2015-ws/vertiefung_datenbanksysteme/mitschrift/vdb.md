@@ -1,3 +1,5 @@
+# Vertiefung Datenbanksysteme WS 2015/16
+
 [TOC]
 ## Mitschrift 2015-10-06
 
@@ -105,6 +107,105 @@ Mit einem FOR-Ausdruck bindet man eine Variable nacheinander an die Elemente, na
 
 ### Praktikum 1 (2015-10-13)
 #### Aufgabe 1
-1. //verein
-2. a) //verein/@name
-   b) 
+1. `//verein`
+2. a) `//verein/@name`
+   b) `//verein/@name/text()`
+3. `//verein[@gegruendet<1930]`
+4. `//verein/parent::node()[@name='Vilsbiburg']/verein/@name/text()`
+5. `//beruf[text()='Lehrer' | text()='Lehrerin']/parent::node()/name/descendant::text()`
+6. `//mitglied[@kategorie='Junior']/name/vorname[text()='Karl']/parent::node()/nachname/text()`
+7. `//strasse[contains(text(), 'weg')]/text()`
+8. `//verein[count(abteilung)>1]/@name/text()`
+9. `//stadt[@name='Bremen']/descendant::mitglied/name/descendant::text()`
+10. `concat(//nachname[text()='Neumann']/ancestor::mitglied/adresse/strasse/text(), ' ', //nachname[text()='Neumann']/ancestor::mitglied/adresse/hausnummer/text(), ', ', //nachname[text()='Neumann']/ancestor::mitglied/adresse/plz/text(), ' ', //nachname[text()='Neumann']/ancestor::mitglied/adresse/ort/text())`
+11. `//nachname[text()='Johansen']/ancestor::abteilung/descendant::mitglied/name/nachname/text()`
+12. `//beruf[text()='Richter'|text()='Richterin']/ancestor::stadt[@einwohnerzahl>100000]/@name/text()`
+13. `count((//mitglied)[1]/ancestor::node())`
+14. `//ort[text()=ancestor::stadt/@name/text()]/ancestor::mitglied/name/nachname/text()`
+15. `(//mitglied)[1] | (//mitglied)[1]/*`
+16. `count(//verein[@name='Borussia']//mitglied)>count(//verein[@name='Werder']//mitglied)`
+17. `//beruf[text()='Busfahrer']/ancestor::stadt/@name/text()`
+18. `(//stadt[@name='Moenchengladbach']//verein[@name='Borussia']//mitglied[last()])[last()]`
+19. a) `count(//*) = count(//mitglied[@mitgliedsnummer=23]/ancestor::*/descendant::*)`
+	b) `count(//* | self::node()) = count(//mitglied[@mitgliedsnummer=23]/ancestor::* | //mitglied[@mitgliedsnummer=23]/preceding::* | //mitglied[@mitgliedsnummer=23]/following::* | //mitglied[@mitgliedsnummer=23]/self::node() | //mitglied[@mitgliedsnummer=23]/descendant::*)`
+20. `//plz[not(number(self::node()) > //plz)][1]` Trick?
+
+## Mitschrift 2015-10-20
+
+### Data Mining
+#### Einführung
+Daten: gespeicherte Fakten
+Information:
+ a) potenziell oder aktuell vorhandenes Wissen
+ b) "in Form" gebrachtes Wissen
+Data-Mining-Algorithmus: Algorithmus, der aus Daten Informationen ableitet (Lernalgorithmus)
+
+Anwendungsgebiete:
+- Wetterdaten
+- Verbindungsdaten in Telekommunikationsnetzen
+- Bewegungsdaten, erfasst durch Sensoren, Wearables
+
+Spezialfall: Data-Mining-Algorithmus zum Zwecke der Klassifikation; erzeugt einen ->
+Klassifizierer: bildet Eingabedaten auf Kategorien (Klassen) ab.
+
+#### Eingaben für Data-Mining-Algorithmen
+Trainingsdaten: Mengen von (gemessenen) Instanzen, die aus Werten von Attributen bestehen.
+Attribute:
+- nominal bzw kategorisch: enum-Werte, diskret
+- numerisch
+
+**Unterscheidung:**
+Argument-Attribute:
+- Attribute, die gemessen/beobachtet werden,
+
+Klassifikationsattribute:
+- in Trainingsdaten gemessen/beobachtet
+- dienen zur Einteilung der Trainingsdaten-Instanzen in Klassen
+- sollen bei "neuen" vorhergesagt werden.
+
+Praxis: Eingabedaten werden im ARFF-Format notiert:
+@relation
+@attribute: Kl./Arg.-Attribute
+@data: Instanzen der Trainingsdaten
+% Kommentare
+
+Probleme bei Eingabedaten:
+- Fehlende Daten
+- Magere Daten
+- Ungenauigkeiten
+
+#### Ausgaben von Data-Mining-Algorithmen
+##### Entscheidungsliste von Entscheidungsregeln
+Liste von Regeln, die auf Instanzen von Daten ++sequentiell abgearbeitet++ werden muss, um zu einer Entscheidung (Klassifikation) zu gelangen.
+
+Format einer Entscheidungsregel:
+- `if(<Bedingung>) then <Folgerung>`
+- `<Bedingung> --> <Folgerung>`
+- `otherwise <Folgerung>`
+
+##### Entscheidungsbaum
+Baum, der von der Wurzel zu den Blättern auf Instanzen abgearbeitet werden muss, um zu einer Entscheidung zu gelangen.
+
+Regressionsbaum: Baum für numerische Vorhersagen
+
+##### Assoziationsregeln
+Regeln, die Abhängigkeiten zwischen Attributen von Trainingsdaten ausdrücken.
+Gleiches Format wie Entscheidungsregeln, allerdings kann ein Klassifikationsattribut Teil einer Bedingung sein.
+
+#### Algorithmen des Data Mining
+##### 1-Regel (1-Regel-Lernverfahren, OneR)
+Zieht für die Entscheidung nur ein Attribut der Trainingsdaten heran: dasjenige mit der geringsten Gesamtfehlerrate.
+
+##### Naives Bayes
+Vorbemerkung: Bayes-Regel
+A, B Ereignisse
+$$P(A|B) = \frac{P(B|A) - P(A)}{P(B)}$$
+gibt zusätzlich: $$$B: B_1 \wedge B_2 \wedge ... \wedge B_N$$$
+mit $$$B_i$$$ unabhängig,
+$$\rightarrow P(A | B_1 \wedge B_2 \wedge ... \wedge B_N) = \frac{P(B_1|A) * P(B_2|A) * ... * P(B_N|A) * P(A)}{P(B)}$$
+
+Eigenschaften: Alle Argumentattribute unabhängig voneinander / gleich wichtig.
+
+Verfahren: neue Instanz: {sunny, cool, high, windy}
+Gesucht: P(play=yes|`<neue Instanz>`), P(play=yes|`<neue Instanz>`)
+-> Entscheidung für den Klassifikationsattributswert mit größerem P.
