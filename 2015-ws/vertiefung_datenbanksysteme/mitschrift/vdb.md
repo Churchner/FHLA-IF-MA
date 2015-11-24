@@ -292,3 +292,86 @@ Prinzip Apriori-Algorithmus:
 - Verfahren zur numerischen Klassifikation
 - Annahme: der Wert des numerischen Klassenattributs ist eine lineare Kombination der Werte der ebenfalls numerischen Argumentattribute.
 - Die Konstanten (Gewichte) der linearen Kombination müssen anhand der Trainingsdaten optimiert werden.
+
+## Mitschrift 2015-11-10
+###### Nearest Neighbor Learning
+
+#### Überprüfung der Qualität von Klassifizierern
+Verfahren:
+- Cross Validation: %-Maß für die Qualität eines Entscheidungsbaums bzw. einer Entscheidungsmatrix
+- Confusion Matrix
+
+### Geodatenbanken und Informationssysteme
+#### Einführung
+- Geodaten: Daten, die einen räumlichen Bezug haben.
+- Geooobjekt: Objekt, das einen räumlichen Bezug hat.
+- Geodatenbanksystem (GeoDBS): SW-System zur Speicherung von Geodaten.
+- Geodatenbank (GeoDB): Datenbank innerhalb eines Geodatenbanksystems.
+- Geoinformationssystem (GeoIS): Rechnergestütztes System zur Erfassung, Speicherung und Verarbeitung von räumlichen Daten. Besteht aus Hardware, Software, Daten, Anwendungen.
+- Standards: DGC, ISO/TC211, SQL/MM
+
+#### Konzeptionelle Datenmodelle
+##### Eigenschaften von Geodaten
+- geometrisch
+- topologisch
+- thematisch (sachlich, fachlich)
+- temporär
+
+###### Modellierung thematischer Eigenschaften:
+- Objektbasiertes Datenmodell: thematische Eigenschaften werden Geoobjekten zugeordnet
+- Raumbasiertes Datenmodell: thematische Eigenschaften werden den Punkten des Datenraumes zugeirdnet, durch eine Funktion $$$f:R^n \rightarrow M$$$ (M beliebige Menge)
+
+###### Modellierung geometrischer Eigenschaften:
+- Vektormodell: basiert auf Geoobjekten, komplexe Objekte werden aus einfacheren zusammengesetzt.
+- Rastermodell: Einteilung des Datenraums in gleichförmige, regelmäßige Rasterzellen (Pixel), Objekte bestehen aus Menge von Rasterzellen.
+
+### Praktikum 2 (2015-11-10)
+**(auf toten Bäumen)**
+
+## Mitschrift 2015-11-17
+#### Feature Geometry Model
+- konzeptionelles Datenmodell
+- objektbasiertes Datenmodell
+- Vektormodell
+- Klassen
+- Objekte 0,1,2,3-dimensional
+- Objekt-Begrenzungen gerade/gebogen
+- Polygone: äußeres, inneres, äußerer Ring, innere Ringe
+
+#### Simple Feature Model
+- konzeptionell
+- objektbasiert
+- Vektormodell
+- Klassen
+- Objekte 0,1,2-dimensional
+- Objektbegrenzungen gerade
+- Polygone
+
+Repräsentation von Geoobjekten in maschinenlesbarer Form:
+- WKT: well known text
+- WKB: well known binary
+
+WKT: POINT, POLYGON, ...
+
+SFM enthält die topologische Modellierung von Geoobjekten, z.B.: Überschneidungen, Berührungen, ...
+
+##### 9-Intersection-Modell (9IM):
+3x3-Matrizen
+Erweiterung: DE-9IM (dimensionally extended 9IM)
+
+#### SQL/MM Spatial
+-> analog
+
+### Räumliche Anfragebearbeitung
+#### Räumliche Basisanfragen
+Punktanfragen, Fensteranfragen(?)... (altjürgische Hieroglyphen?!)
+#### Mehrstufige Anfragebearbeitung
+Motivation: sehr komplexe geometrische Objekte
+Realisierung: Treffer, Fehltreffer, Koordinaten für nächsten Filterschritt
+Realisierung für Geoobjekte in Geodatenbanken: Filterung über Approximation
+###### Approximations-Eigenschaften:
+- konservativ $$$\leftarrow\rightarrow$$$ progressiv
+- einelementig $$$\leftarrow\rightarrow$$$ mehrelementig
+- ...
+
+## Mitschrift 2015-11-24
