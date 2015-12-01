@@ -325,7 +325,7 @@ Verfahren:
 - Vektormodell: basiert auf Geoobjekten, komplexe Objekte werden aus einfacheren zusammengesetzt.
 - Rastermodell: Einteilung des Datenraums in gleichförmige, regelmäßige Rasterzellen (Pixel), Objekte bestehen aus Menge von Rasterzellen.
 
-### Praktikum 2 (2015-11-10)
+### Praktikum 3 (2015-11-10)
 **(auf toten Bäumen)**
 
 ## Mitschrift 2015-11-17
@@ -375,3 +375,87 @@ Realisierung für Geoobjekte in Geodatenbanken: Filterung über Approximation
 - ...
 
 ## Mitschrift 2015-11-24
+### Indexe bei Geodatenbanken
+#### Einführung
+Motivation: Geoobjekte sollen schnell gefunden werden!
+Anforderungen:
+- effiziente Ausführung von Basisanfragen
+- Robustheit gegenüber Geodaten-Änderungen
+- Gleichmäßige Speicherauslastung
+- Robustheit gegenüber ungleich im Datenraum verteilten Objekten
+
+#### Datenraumeinteilung
+**MUR:** minimal umgebendes Rechteck: kleinstmögliches achsenparalleles Rechteck, das eine Menge von Geoobjekten umschließt.
+**Datenraum:** Raum, in dem sich zu indizierende Objekte befinden.
+**Blockregion:** einfach und klar abgrenzbarer Teil eines Datenraums.
+Blockregionen erhalten Nummern: **Blockregionsnummern** (BRNs)
+
+Aufgabe der Datenraumeinteilung: 
+räumliche Lage eines Geoobjektes $$$\leftarrow\rightarrow$$$ Blockregion(-en) $$$\leftarrow\rightarrow$$$ BRNs ($$$\leftarrow$$$besitzen Ordnung) $$$\leftarrow\rightarrow$$$ Datenblock im Speicher
+
+##### Grundtechniken zur Datenraumeinteilung
+###### Clipping
+- Einteilung des Raums in Blockregionen
+- relativ willkürliche Nummerierung
+- anschließend Konstruktion eines Index auf die BRNs
+$$$\Rightarrow$$$Ineffizient insbesondere beim Hinzufügen/Löschen von Objekten
+
+###### Einbettung in den 1-dimensionalen Raum
+- z-Ordnung durch Zick-Zack-Kurve (fraktal) $$$\rightarrow$$$ z-Werte (x,y($$$\leftarrow$$$Auflösung))
+
+###### Überlappende Blockregionen
+Unregelmäßige Definition der Blockregionen, sodass jedes Geoobjekt in genau einer Blockregion enthalten ist. $$$\rightarrow$$$R-Bäume
+
+##### Quadrantenbäume
+Grundlage: Einbettung in 1-dimensionalen Raum
+Ein Quadrantenbaum ist ein Baum, der einen k-dimensionalen Datenraum in $$$2^k$$$ gleich große Regionen rekursiv unterteilt.
+
+Beispiele für Quadrantenbäume:
+- PR (Point-Region)-Quadrantenbaum $$$\rightarrow$$$ Quadrantenbaum, der einzelne Punkte in (privaten) Regionen indiziert.
+- linearer Quadrantenbaum: $$$B^+$$$- und Quadrantenbaum, der Blockregionen$$$^1$$$ oder Geoobjekte$$$^2$$$ indiziert nachdem diese über z-Werte in eine lineare Ordnung gebracht worden sind.
+( $$$^1$$$ raumbezogener linearer Q-Baum)
+( $$$^2$$$ datenbezogener Q-Baum)
+
+### Praktikum 4 (2015-11-24)
+siehe Mail an Jürgensen
+
+## Mitschrift 2015-12-01
+
+##### R-Bäume
+Ein R-Baum ist ein balancierter Index, der multidimensionale Rechtecke mithilfe überlappender Blockregionen organisiert.
+Knoten: Verzeichnisknoten (innere Knoten) mit Einträgen der Form (mur, ref)
+- mur: immer alle MURs, die durch Kindknoten repräsentiert werden
+- ref: Verweis auf einen Kindknoten
+
+Datenknoten mit Einträgen der Form (gmur, gref)
+- gmur: MUR eines Geoobjekts
+- gref: Verweis auf dieses Geoobjekt
+
+### Geometrische Algorithmen
+#### Grundverfahren
+- **inkrementelle Methode:** ausgehend von einer kleinen Datenmenge, nehme man immer wieder einen weiteren Teil der Datenmenge hinzu, bis das ganze Problem gelöst ist.
+- **Teile-und-Herrsche-Methode (rekursiv):** Löse ein Problem durch Lösung seiner Teilprobleme,..., bis Trivialprobleme auftauchen.
+- **Plane Sweep:** Verschiebe eine Linie (je nach Dim. Ebene,...) über den Datenraum, bei relevanten Punkten: stoppe und berechne.
+
+#### Algorithmen für Inklusionsprobleme
+Problem: ist ein Geoobjekt in einem anderen enthalten?
+##### Punkt-in-Polygon-Test:
+Punkt p, Polygon pol: Ist p in pol enthalten?
+
+###### Algorithmus nach Jordan
+Strahl von p in Richtung pol; ungerade Anzahl Schnittpunkte $$$\rightarrow$$$ p innerhalb, sonst außerhalb
+
+###### Winkelsummentest
+Berechnung von Winkeln: alle Strecken berechnen, die p mit den Polygoneckpunkten verbinden.
+Winkel zwischen benachbarten Strecken berechnen, $$$\Sigma=360°\Rightarrow$$$Punkt innerhalb, $$$\Sigma=0°\Rightarrow$$$Punkt außerhalb.
+
+##### Erweiterung: Polygon-in-Polygon-Test:
+Polygone pol1, pol2:
+Zuerst wird getestet, ob ein Eckpunkt von pol1 in pol2 enthalten ist (Punkt-in-Polygon-Test).
+Ist das nicht der Fall, liegt pol1 nicht in pol2.
+Andernfalls wird geprüft, ob eine Kante von pol1 eine Kante von pol2 schneidet.
+Ist dies nicht der Fall, ist pol1 in pol2 enthalten, sonst nicht.
+
+#### Algorithmen für Schnittprobleme
+Schneiden sich geometrische Objekte?
+Methode: z.B. Plane-Sweep
