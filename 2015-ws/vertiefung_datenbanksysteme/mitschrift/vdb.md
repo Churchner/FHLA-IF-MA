@@ -435,7 +435,7 @@ Datenknoten mit Einträgen der Form (gmur, gref)
 #### Grundverfahren
 - **inkrementelle Methode:** ausgehend von einer kleinen Datenmenge, nehme man immer wieder einen weiteren Teil der Datenmenge hinzu, bis das ganze Problem gelöst ist.
 - **Teile-und-Herrsche-Methode (rekursiv):** Löse ein Problem durch Lösung seiner Teilprobleme,..., bis Trivialprobleme auftauchen.
-- **Plane Sweep:** Verschiebe eine Linie (je nach Dim. Ebene,...) über den Datenraum, bei relevanten Punkten: stoppe und berechne.
+- **Plane Sweep:** Verschiebe eine Linie (je nach Dim.: Ebene,...) über den Datenraum, bei relevanten Punkten: stoppe und berechne.
 
 #### Algorithmen für Inklusionsprobleme
 Problem: ist ein Geoobjekt in einem anderen enthalten?
@@ -459,3 +459,9 @@ Ist dies nicht der Fall, ist pol1 in pol2 enthalten, sonst nicht.
 #### Algorithmen für Schnittprobleme
 Schneiden sich geometrische Objekte?
 Methode: z.B. Plane-Sweep
+Siehe Algorithmen:
+- für den räumlichen Verbund
+- für verschiedene Join-Bedingungen, z.B. intersection
+
+#### Algorithmen für Anfragen auf nächste Nachbarn
+wesentliche Grundlage: performante Datenstruktur: priority queue
